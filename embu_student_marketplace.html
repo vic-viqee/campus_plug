@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Plug - Embu Student Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #667eea;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .category-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .listings-section {
+            margin: 3rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+        }
+
+        .listing-content {
+            padding: 1rem;
+        }
+
+        .listing-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Campus Plug</div>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-secondary" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                <div class="user-info" id="userInfo">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span id="userName"></span>
+                    <button class="btn btn-primary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Your Campus Plug for Everything</h1>
+                <p>Buy, sell & connect</p>
+                <button class="btn btn-success" onclick="showPostModal()">Post a Listing</button>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="categories">
+                <div class="category-card" onclick="filterByCategory('items')">
+                    <div class="category-icon">📦</div>
+                    <h3>Items for Sale</h3>
+                    <p>Furniture, electronics, books, and more</p>
+                </div>
+                <div class="category-card" onclick="filterByCategory('services')">
+                    <div class="category-icon">🛠️</div>
+                    <h3>Services</h3>
+                    <p>Laundry, tutoring, repairs, and other services</p>
+                </div>
+            </div>
+
+            <div class="listings-section">
+                <div class="section-header">
+                    <h2>Recent Listings</h2>
+                    <input type="text" class="search-box" placeholder="Search listings..." id="searchBox" onkeyup="searchListings()">
+                </div>
+                <div class="listings-grid" id="listingsGrid">
+                    <!-- Sample listings will be populated here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="registerForm" onsubmit="register(event)">
+                <div class="form-group">
+                    <label for="registerName">Full Name:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Phone Number:</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Listing Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('postModal')">&times;</span>
+            <h2>Post a Listing</h2>
+            <form id="postForm" onsubmit="postListing(event)">
+                <div class="form-group">
+                    <label for="postCategory">Category:</label>
+                    <select id="postCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="items">Items for Sale</option>
+                        <option value="services">Services</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="postTitle">Title:</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="postDescription">Description:</label>
+                    <textarea id="postDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="postPrice">Price (KSh):</label>
+                    <input type="number" id="postPrice" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="postLocation">Location:</label>
+                    <input type="text" id="postLocation" placeholder="e.g., Embu University Main Campus" required>
+                </div>
+                <div class="form-group">
+                    <label for="postContact">Contact (Phone/WhatsApp):</label>
+                    <input type="tel" id="postContact" required>
+                </div>
+                <button type="submit" class="btn btn-success">Post Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let listings = [];
+        let users = [];
+        let currentFilter = 'all';
+
+        // Initialize storage
+        try {
+            currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+            listings = JSON.parse(localStorage.getItem('listings')) || [];
+            users = JSON.parse(localStorage.getItem('users')) || [];
+        } catch (e) {
+            console.log('Using memory storage instead of localStorage');
+            currentUser = null;
+            listings = [];
+            users = [];
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+            displayListings();
+            
+            // Add some sample listings if none exist
+            if (listings.length === 0) {
+                addSampleListings();
+            }
+        });
+
+        function updateUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'flex';
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            } else {
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'block';
+        }
+
+        function showPostModal() {
+            if (!currentUser) {
+                alert('Please login first to post a listing');
+                showLoginModal();
+                return;
+            }
+            document.getElementById('postModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation (in real app, this would be server-side)
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                try {
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                } catch (e) {
+                    console.log('Cannot save to localStorage');
+                }
+                updateUI();
+                closeModal('loginModal');
+                alert('Login successful!');
+                document.getElementById('loginForm').reset();
+            } else {
+                alert('Invalid email or password');
+            }
+        }
+
+        function register(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (users.find(u => u.email === email)) {
+                alert('Email already registered');
+                return;
+            }
+            
+            const newUser = { name, email, phone, password, id: Date.now() };
+            users.push(newUser);
+            try {
+                localStorage.setItem('users', JSON.stringify(users));
+            } catch (e) {
+                console.log('Cannot save to localStorage');
+            }
+            
+            currentUser = newUser;
+            try {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } catch (e) {
+                console.log('Cannot save to localStorage');
+            }
+            updateUI();
+            closeModal('registerModal');
+            document.getElementById('registerForm').reset();
+            alert('Registration successful!');
+        }
+
+        function logout() {
+            currentUser = null;
+            try {
+                localStorage.removeItem('currentUser');
+            } catch (e) {
+                console.log('Cannot access localStorage');
+            }
+            updateUI();
+        }
+
+        function postListing(event) {
+            event.preventDefault();
+            
+            if (!currentUser) {
+                alert('Please login first to post a listing');
+                return;
+            }
+            
+            const newListing = {
+                id: Date.now(),
+                category: document.getElementById('postCategory').value,
+                title: document.getElementById('postTitle').value,
+                description: document.getElementById('postDescription').value,
+                price: document.getElementById('postPrice').value,
+                location: document.getElementById('postLocation').value,
+                contact: document.getElementById('postContact').value,
+                seller: currentUser.name,
+                sellerId: currentUser.id,
+                datePosted: new Date().toLocaleDateString()
+            };
+            
+            listings.unshift(newListing);
+            try {
+                localStorage.setItem('listings', JSON.stringify(listings));
+            } catch (e) {
+                console.log('Cannot save to localStorage');
+            }
+            displayListings();
+            closeModal('postModal');
+            document.getElementById('postForm').reset();
+            alert('Listing posted successfully!');
+        }
+
+        function displayListings() {
+            const grid = document.getElementById('listingsGrid');
+            let filteredListings = listings;
+            
+            if (currentFilter !== 'all') {
+                filteredListings = listings.filter(listing => listing.category === currentFilter);
+            }
+            
+            if (filteredListings.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">No listings found. Be the first to post!</p>';
+                return;
+            }
+            
+            grid.innerHTML = filteredListings.map(listing => `
+                <div class="listing-card">
+                    <div class="listing-image">
+                        ${listing.category === 'items' ? '📦' : '🛠️'}
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-price">KSh ${parseInt(listing.price).toLocaleString()}</div>
+                        <div class="listing-title">${listing.title}</div>
+                        <div class="listing-location">📍 ${listing.location}</div>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <small style="color: #999;">By ${listing.seller}</small>
+                            <button class="btn btn-primary" onclick="contactSeller('${listing.contact}', '${listing.title}')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function contactSeller(contact, itemTitle) {
+            // Clean the phone number
+            let cleanContact = contact.replace(/\D/g, ''); // Remove non-digits
+            
+            // Handle Kenyan numbers
+            if (cleanContact.startsWith('0')) {
+                cleanContact = '254' + cleanContact.substring(1);
+            } else if (!cleanContact.startsWith('254')) {
+                cleanContact = '254' + cleanContact;
+            }
+            
+            const message = `Hi! I'm interested in your listing: ${itemTitle}`;
+            const whatsappUrl = `https://wa.me/${cleanContact}?text=${encodeURIComponent(message)}`;
+            
+            // Try to open WhatsApp, fallback to showing the number
+            try {
+                window.open(whatsappUrl, '_blank');
+            } catch (e) {
+                alert(`Contact seller at: ${contact}\nMessage: ${message}`);
+            }
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            displayListings();
+        }
+
+        function searchListings() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const grid = document.getElementById('listingsGrid');
+            
+            let filteredListings = listings.filter(listing => 
+                listing.title.toLowerCase().includes(searchTerm) ||
+                listing.description.toLowerCase().includes(searchTerm) ||
+                listing.location.toLowerCase().includes(searchTerm)
+            );
+            
+            if (currentFilter !== 'all') {
+                filteredListings = filteredListings.filter(listing => listing.category === currentFilter);
+            }
+            
+            if (filteredListings.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">No listings found matching your search.</p>';
+                return;
+            }
+            
+            grid.innerHTML = filteredListings.map(listing => `
+                <div class="listing-card">
+                    <div class="listing-image">
+                        ${listing.category === 'items' ? '📦' : '🛠️'}
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-price">KSh ${parseInt(listing.price).toLocaleString()}</div>
+                        <div class="listing-title">${listing.title}</div>
+                        <div class="listing-location">📍 ${listing.location}</div>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <small style="color: #999;">By ${listing.seller}</small>
+                            <button class="btn btn-primary" onclick="contactSeller('${listing.contact}', '${listing.title}')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSampleListings() {
+            const sampleListings = [
+                {
+                    id: 1,
+                    category: 'items',
+                    title: 'Study Desk & Chair Set',
+                    description: 'Perfect condition wooden desk with matching chair. Great for studying. Selling because I\'m graduating.',
+                    price: '3500',
+                    location: 'Embu University Main Campus',
+                    contact: '0712345678',
+                    seller: 'Jane Mwangi',
+                    sellerId: 1,
+                    datePosted: new Date().toLocaleDateString()
+                },
+                {
+                    id: 2,
+                    category: 'services',
+                    title: 'Laundry Service',
+                    description: 'Professional laundry service for students. Washing, drying, and ironing. Quick turnaround time.',
+                    price: '200',
+                    location: 'Near Embu University',
+                    contact: '0723456789',
+                    seller: 'Peter Kamau',
+                    sellerId: 2,
+                    datePosted: new Date().toLocaleDateString()
+                },
+                {
+                    id: 3,
+                    category: 'items',
+                    title: 'Samsung TV 32 inch',
+                    description: 'Smart TV in excellent condition. Perfect for movies and gaming. Includes remote and stand.',
+                    price: '15000',
+                    location: 'Embu Town',
+                    contact: '0734567890',
+                    seller: 'Mike Ochieng',
+                    sellerId: 3,
+                    datePosted: new Date().toLocaleDateString()
+                }
+            ];
+            
+            listings = sampleListings;
+            localStorage.setItem('listings', JSON.stringify(listings));
+            displayListings();
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
